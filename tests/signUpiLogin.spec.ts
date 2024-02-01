@@ -13,6 +13,7 @@ test('signup', async ({ page }) => {
     await page.getByRole('button', { name: 'Sign up' }).click();
     page.on('dialog', dialog => {
         dialog.accept();
+        expect.soft(dialog.message()).toContain('Sign up successful.')
     });
 });
 
@@ -26,5 +27,5 @@ test('login', async ({ page }) => {
     await page.locator('#loginpassword').click();
     await page.locator('#loginpassword').fill('dobrasifra1');
     await page.getByRole('button', { name: 'Log in' }).click();
-    await expect(page.getByText('Welcome nekiLik1')).toBeVisible();
+    await expect.soft(page.getByText('Welcome nekiLik1')).toBeVisible();
 });

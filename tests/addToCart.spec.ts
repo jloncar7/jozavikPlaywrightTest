@@ -10,9 +10,10 @@ test('Add to cart', async ({ page }) => {
     // rijesi se pop-upa
     page.on('dialog', dialog => {
         dialog.accept();
+        expect.soft(dialog.message()).toContain('Product added')
     });
     // klikni na cart
     await page.getByRole('link', { name: 'Cart', exact: true }).click();
     // assertion za kraj
-    await expect(page.getByText('Samsung galaxy s6')).toBeVisible();
+    await expect.soft(page.getByText('Samsung galaxy s6')).toBeVisible();
 });
