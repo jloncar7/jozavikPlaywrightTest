@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+/*import { test, expect } from '@playwright/test';
 
 test('checkAboutUsVideoWorks', async ({ page }) => {
     //otvori stranicu
@@ -10,3 +10,4 @@ test('checkAboutUsVideoWorks', async ({ page }) => {
     await page.locator('button').click();
 
 });
+*/

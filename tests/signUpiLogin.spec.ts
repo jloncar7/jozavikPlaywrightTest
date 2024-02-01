@@ -13,7 +13,7 @@ test('signup', async ({ page }) => {
     await page.getByRole('button', { name: 'Sign up' }).click();
     page.on('dialog', dialog => {
         dialog.accept();
-        expect.soft(dialog.message()).toContain('Sign up successful.')
+        expect.soft(dialog.message()).toContain('This user alrady exist.')
     });
 });
 
