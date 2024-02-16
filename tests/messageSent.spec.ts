@@ -1,6 +1,29 @@
 import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker/locale/en';
 
+test('open new message screen', async ({ page }) => {
+    //odi na stranicu
+    await page.goto('https://www.demoblaze.com/index.html');
+    await expect(page).toHaveURL('https://www.demoblaze.com/index.html')
+    await expect.soft(page).toHaveTitle('STORE')
+    //klikni na contact
+    await page.getByRole('link', { name: 'Contact' }).click();
+    await expect.soft(page.getByText('New message')).toBeVisible();
+    await expect.soft(page.getByText('Send message')).toBeVisible();
+});
+
+test('close new message screen', async ({ page }) => {
+    //odi na stranicu
+    await page.goto('https://www.demoblaze.com/index.html');
+    await expect(page).toHaveURL('https://www.demoblaze.com/index.html')
+    await expect.soft(page).toHaveTitle('STORE')
+    //klikni na contact
+    await page.getByRole('link', { name: 'Contact' }).click();
+    await expect.soft(page.getByText('Send message')).toBeVisible();
+    await page.getByLabel('New message').getByText('Close').click();
+    await expect.soft(page.getByText('Send message')).not.toBeVisible();
+});
+
 test('send contact message', async ({ page }) => {
     //generacija fejk podataka
     const email = faker.internet.email();
@@ -26,3 +49,4 @@ test('send contact message', async ({ page }) => {
         expect.soft(dialog.message()).toContain('Thanks for the message!!')
     });
 });
+
