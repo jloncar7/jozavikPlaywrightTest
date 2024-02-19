@@ -44,7 +44,7 @@ test('check item is removed from cart', async ({ page }) => {
     await expect.soft(page.getByText('MacBook air')).not.toBeVisible();
 });
 
-test('place order', async ({ page }) => {
+test('place order successfully', async ({ page }) => {
     // navigiraj na stranicu
     const randomName = faker.person.fullName();
     const country = faker.location.country();
@@ -88,4 +88,55 @@ test('place order', async ({ page }) => {
     await page.getByText('Thank you for your purchase!').isVisible();
     await page.getByRole('button', { name: 'OK' }).click();
     await page.getByText('CATEGORIES').isVisible();
+});
+
+test('place order with blank personal information screen ', async ({ page }) => {
+    // navigiraj na stranicu
+    await page.goto('https://www.demoblaze.com/index.html');
+    // klikni na samsung s6
+    await page.getByRole('link', { name: 'Samsung galaxy s6' }).click();
+    // klikni na add to cart
+    await page.getByRole('link', { name: 'Add to cart' }).click();
+    // rijesi se pop-upa
+    await page.getByRole('link', { name: 'Cart', exact: true }).click();
+    await page.getByRole('button', { name: 'Place Order' }).click()
+    await page.getByRole('button', { name: 'Purchase' }).click()
+    page.on('dialog', dialog => {
+        dialog.accept();
+        expect.soft(dialog.message()).toContain('Please fill out Name and Creditcard.')
+    });
+});
+
+test('place order without entering name and CC', async ({ page }) => {
+    // navigiraj na stranicu
+    const randomName = faker.person.fullName();
+    const country = faker.location.country();
+    const city = faker.location.city();
+    const creditCard = faker.finance.creditCardNumber();
+    const month = faker.date.month();
+    await page.goto('https://www.demoblaze.com/index.html');
+    // klikni na samsung s6
+    await page.getByRole('link', { name: 'Samsung galaxy s6' }).click();
+    // klikni na add to cart
+    await page.getByRole('link', { name: 'Add to cart' }).click();
+    // rijesi se pop-upa
+    page.on('dialog', dialog => {
+        dialog.accept();
+        expect.soft(dialog.message()).toContain('Product added')
+    });
+    // klikni na cart
+    await page.getByRole('link', { name: 'Cart', exact: true }).click();
+    await page.getByRole('button', { name: 'Place Order' }).click()
+    await page.getByLabel('Country:').click();
+    await page.getByLabel('Country:').fill(country);
+    await page.getByLabel('City:').click();
+    await page.getByLabel('City:').fill(city);
+    await page.getByLabel('Month:').click();
+    await page.getByLabel('Month:').fill(month);
+    await page.getByLabel('Year:').click();
+    await page.getByLabel('Year:').fill('2025');
+    page.on('dialog', dialog => {
+        dialog.accept();
+        expect.soft(dialog.message()).toContain('Please fill out Name and Creditcard.')
+    });
 });
