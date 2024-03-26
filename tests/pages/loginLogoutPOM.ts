@@ -7,6 +7,7 @@ export class LoginLogoutPage {
     readonly passwordTextBox: Locator;
     readonly logInButton: Locator;
     readonly closeButton: Locator;
+    readonly logInHeader: Locator;
 
 
     constructor(page: Page) {
@@ -17,13 +18,14 @@ export class LoginLogoutPage {
         this.passwordTextBox = page.locator('#loginpassword')
         this.logInButton = page.getByRole('button', { name: 'Log in' })
         this.closeButton = page.getByLabel('Log in').getByText('Close')
+        this.logInHeader = page.getByRole('heading', { name: 'Log in', exact: true })
     }
 
     async gotoLoginLogoutPage() {
         await this.page.goto('https://www.demoblaze.com/index.html');
         await expect.soft(this.page).toHaveURL('https://www.demoblaze.com/index.html');
         await this.logInButton.click();
-        await expect.soft(this.page.getByRole('heading', { name: 'Log in', exact: true })).toBeVisible();
+        await expect.soft(this.logInHeader).toBeVisible();
     }
 
     async closeLoginLogoutPage() {
@@ -31,7 +33,7 @@ export class LoginLogoutPage {
         await expect.soft(this.page).toHaveURL('https://www.demoblaze.com/index.html');
         await this.logInButton.click();
         await this.closeButton.click();
-        await expect.soft(this.page.getByRole('heading', { name: 'Log in', exact: true })).not.toBeVisible();
+        await expect.soft(expect.soft(this.logInHeader).not.toBeVisible());
     }
 
     async loginExistingAccount(username, password) {
