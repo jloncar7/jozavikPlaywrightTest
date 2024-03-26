@@ -1,13 +1,13 @@
 import { test, expect } from '@playwright/test';
 import { normalize } from 'path';
+import { HomePage } from './pages/homePagePOM.ts';
 
 test.describe('homepage test cases', () => {
 
-    //otvori nasu demo stranicu, dodaj assertionse
+    //otvori nasu demo stranicu
     test('open main page', async ({ page }) => {
-        await page.goto('https://www.demoblaze.com/index.html');
-        await expect(page).toHaveURL('https://www.demoblaze.com/index.html')
-        await expect.soft(page).toHaveTitle('STORE')
+        const openHome = new HomePage(page);
+        await openHome.gotoHomePage();
         await page.getByText('CATEGORIES').isVisible();
     });
 
