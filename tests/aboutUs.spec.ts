@@ -16,10 +16,8 @@ test.describe('about us test cases', () => {
     });
 
     test('about us page css checks', async ({ page }) => {
-        await page.goto('https://www.demoblaze.com/index.html');
-        await expect(page).toHaveURL('https://www.demoblaze.com/index.html');
-        await expect.soft(page).toHaveTitle('STORE');
-        await page.getByRole('link', { name: 'About us' }).click();
+        const cssAboutUs = new AboutUsPage(page);
+        await cssAboutUs.gotoAboutUs();
         await expect(page.locator('#videoModalLabel')).toBeVisible();
 
     });

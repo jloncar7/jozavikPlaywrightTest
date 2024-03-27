@@ -4,7 +4,9 @@ export class AboutUsPage {
     readonly page: Page;
     readonly aboutUsButton: Locator;
     readonly aboutUsHeader: Locator;
-    readonly aboutUsVideo: Locator;
+    readonly aboutUsVideoClose: Locator;
+    readonly aboutUsVideoModal: Locator;
+
 
 
     constructor(page: Page) {
@@ -12,7 +14,8 @@ export class AboutUsPage {
         this.page = page
         this.aboutUsButton = page.getByRole('link', { name: 'About us' })
         this.aboutUsHeader = page.getByRole('heading', { name: 'About us' })
-        this.aboutUsVideo = page.locator('#videoModal').getByText('Close', { exact: true })
+        this.aboutUsVideoClose = page.locator('#videoModal').getByText('Close', { exact: true })
+        this.aboutUsVideoModal = page.locator('#videoModal')
     }
 
     async gotoAboutUs() {
