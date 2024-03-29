@@ -36,6 +36,10 @@ test.describe('login/logout test cases', () => {
     });
 
     test('login with nonexisting account', async ({ page }) => {
+        page.on('dialog', dialog => {
+            expect.soft(dialog.message()).toContain('User does not exist.')
+            dialog.accept();
+        });
         const username = faker.internet.userName();
         const password = faker.internet.password();
         await page.goto('https://www.demoblaze.com/index.html');
@@ -46,25 +50,25 @@ test.describe('login/logout test cases', () => {
         await page.locator('#loginpassword').click();
         await page.locator('#loginpassword').fill(password);
         await page.getByRole('button', { name: 'Log in' }).click();
-        page.on('dialog', dialog => {
-            dialog.accept();
-            expect.soft(dialog.message()).toContain('User does not exist.')
-        });
     });
 
     //login funkcija
     test('login with no credentials', async ({ page }) => {
+        page.on('dialog', dialog => {
+            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
+            dialog.accept();
+        });
         await page.goto('https://www.demoblaze.com/index.html');
         await expect.soft(page).toHaveURL('https://www.demoblaze.com/index.html');
         await page.getByRole('link', { name: 'Log in' }).click();
         await page.getByRole('button', { name: 'Log in' }).click();
-        page.on('dialog', dialog => {
-            dialog.accept();
-            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
-        });
     });
 
     test('login with blank username field', async ({ page }) => {
+        page.on('dialog', dialog => {
+            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
+            dialog.accept();
+        });
         const password = faker.internet.password();
         await page.goto('https://www.demoblaze.com/index.html');
         await expect.soft(page).toHaveURL('https://www.demoblaze.com/index.html');
@@ -72,13 +76,13 @@ test.describe('login/logout test cases', () => {
         await page.locator('#loginpassword').click();
         await page.locator('#loginpassword').fill(password);
         await page.getByRole('button', { name: 'Log in' }).click();
-        page.on('dialog', dialog => {
-            dialog.accept();
-            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
-        });
     });
 
     test('login with blank password field', async ({ page }) => {
+        page.on('dialog', dialog => {
+            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
+            dialog.accept();
+        });
         const username = faker.internet.userName();
         await page.goto('https://www.demoblaze.com/index.html');
         await expect.soft(page).toHaveURL('https://www.demoblaze.com/index.html');
@@ -86,10 +90,7 @@ test.describe('login/logout test cases', () => {
         await page.locator('#loginusername').click();
         await page.locator('#loginusername').fill(username);
         await page.getByRole('button', { name: 'Log in' }).click();
-        page.on('dialog', dialog => {
-            dialog.accept();
-            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
-        });
+
     });
 
     test('login css checks', async ({ page }) => {
