@@ -5,6 +5,10 @@ test.describe('signup test cases', () => {
 
     //signup funkcija
     test('signup already existing account', async ({ page }) => {
+        page.on('dialog', dialog => {
+            expect.soft(dialog.message()).toContain('This user already exist.')
+            dialog.accept();
+        });
         //odi na stranicu
         await page.goto('https://www.demoblaze.com/index.html');
         await expect(page).toHaveURL('https://www.demoblaze.com/index.html')
@@ -14,13 +18,13 @@ test.describe('signup test cases', () => {
         await page.getByLabel('Password:').click();
         await page.getByLabel('Password').fill('dobrasifra1');
         await page.getByRole('button', { name: 'Sign up' }).click();
-        page.on('dialog', dialog => {
-            dialog.accept();
-            expect.soft(dialog.message()).toContain('This user already exist.')
-        });
     });
 
     test('new account signup', async ({ page }) => {
+        page.on('dialog', dialog => {
+            expect.soft(dialog.message()).toContain('Sign up successful.')
+            dialog.accept();
+        });
         const username = faker.internet.userName();
         const password = faker.internet.password();
         //odi na stranicu
@@ -32,27 +36,25 @@ test.describe('signup test cases', () => {
         await page.getByLabel('Password:').click();
         await page.getByLabel('Password').fill(password);
         await page.getByRole('button', { name: 'Sign up' }).click();
-        page.on('dialog', dialog => {
-            dialog.accept();
-            expect.soft(dialog.message()).toContain('Sign up successful.')
-        });
-
     });
 
     test('username and password fields blank', async ({ page }) => {
+        page.on('dialog', dialog => {
+            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
+            dialog.accept();
+        });
         //odi na stranicu
         await page.goto('https://www.demoblaze.com/index.html');
         await expect(page).toHaveURL('https://www.demoblaze.com/index.html')
         await page.getByRole('link', { name: 'Sign up' }).click();
         await page.getByRole('button', { name: 'Sign up' }).click();
-        page.on('dialog', dialog => {
-            dialog.accept();
-            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
-        });
-
     });
 
     test('password field blank', async ({ page }) => {
+        page.on('dialog', dialog => {
+            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
+            dialog.accept();
+        });
         const username = faker.internet.userName();
         //odi na stranicu
         await page.goto('https://www.demoblaze.com/index.html');
@@ -61,14 +63,15 @@ test.describe('signup test cases', () => {
         await page.getByRole('button', { name: 'Sign up' }).click();
         await page.getByLabel('Username:').click();
         await page.getByLabel('Username:').fill(username);
-        page.on('dialog', dialog => {
-            dialog.accept();
-            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
-        });
+
 
     });
 
     test('username field blank', async ({ page }) => {
+        page.on('dialog', dialog => {
+            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
+            dialog.accept();
+        });
         const password = faker.internet.password();
         //odi na stranicu
         await page.goto('https://www.demoblaze.com/index.html');
@@ -77,10 +80,7 @@ test.describe('signup test cases', () => {
         await page.getByRole('button', { name: 'Sign up' }).click();
         await page.getByLabel('Password:').click();
         await page.getByLabel('Password:').fill(password);
-        page.on('dialog', dialog => {
-            dialog.accept();
-            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
-        });
+
 
     });
 

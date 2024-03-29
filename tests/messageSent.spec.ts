@@ -27,6 +27,10 @@ test.describe('contact test cases', () => {
     });
 
     test('send contact message', async ({ page }) => {
+        page.on('dialog', dialog => {
+            expect.soft(dialog.message()).toContain('Thanks for the message!!')
+            dialog.accept();
+        });
         //generacija fejk podataka
         const email = faker.internet.email();
         const randomName = faker.person.fullName();
@@ -45,11 +49,6 @@ test.describe('contact test cases', () => {
         //ubaci neku poruku
         await page.locator('#message-text').click();
         await page.locator('#message-text').fill('This is a test message. Please do not reply to this message. Thank you.')
-        //rijesi se dijaloga
-        page.on('dialog', dialog => {
-            dialog.accept();
-            expect.soft(dialog.message()).toContain('Thanks for the message!!')
-        });
     });
 
     test('message screen css checks', async ({ page }) => {
