@@ -7,6 +7,7 @@ export class AboutUsPage {
     readonly aboutUsXButton: Locator;
     readonly aboutUsHeader: Locator;
     readonly aboutUsVideo: Locator;
+    readonly videoLocator: Locator
 
 
 
@@ -18,6 +19,7 @@ export class AboutUsPage {
         this.aboutUsXButton = page.locator('#videoModal').getByLabel('Close');
         this.aboutUsHeader = page.getByRole('heading', { name: 'About us', exact: true })
         this.aboutUsVideo = page.locator('#example-video')
+        this.videoLocator = page.locator('#videoModal div').filter({ hasText: 'Video Player is loading.Play' }).nth(3)
     }
 
     async gotoHome() {
@@ -40,7 +42,9 @@ export class AboutUsPage {
         await expect.soft(this.aboutUsHeader).toBeVisible();
         await expect(this.aboutUsVideo).toBeVisible();
         await expect(this.aboutUsXButton).toBeVisible();
-
-
+        await expect(this.videoLocator).toBeVisible();
+        await expect(this.aboutUsHeader).toHaveCSS('font-size', '20px');
+        await expect(this.aboutUsCloseButton).toHaveCSS('align-items', 'flex-start');
+        await expect(this.aboutUsXButton).toHaveCSS('cursor', 'pointer');
     }
 }
