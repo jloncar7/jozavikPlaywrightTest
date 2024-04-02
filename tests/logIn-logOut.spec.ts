@@ -11,6 +11,7 @@ test.describe('login/logout test cases', () => {
 
     test('close log in page', async ({ page }) => {
         const closeLogin = new LoginLogoutPage(page);
+        await closeLogin.gotoLoginLogoutPage();
         await closeLogin.closeLoginLogoutPage();
     });
 
@@ -22,84 +23,40 @@ test.describe('login/logout test cases', () => {
     });
 
     test('logout', async ({ page }) => {
-        await page.goto('https://www.demoblaze.com/index.html');
-        await expect.soft(page).toHaveURL('https://www.demoblaze.com/index.html');
-        await page.getByRole('link', { name: 'Log in' }).click();
-        await page.locator('#loginusername').click();
-        await page.locator('#loginusername').fill('nekiLik1');
-        await page.locator('#loginpassword').click();
-        await page.locator('#loginpassword').fill('dobrasifra1');
-        await page.getByRole('button', { name: 'Log in' }).click();
-        await expect.soft(page.getByText('Welcome nekiLik1')).toBeVisible();
-        await page.getByRole('link', { name: 'Log out' }).click();
-        await expect.soft(page.getByText('Welcome nekiLik1')).not.toBeVisible();
+        const logOutTest = new LoginLogoutPage(page);
+        await logOutTest.gotoLoginLogoutPage();
+        await logOutTest.loginExistingAccount('nekiLik1', 'dobrasifra1');
+        await logOutTest.logOut();
     });
 
     test('login with nonexisting account', async ({ page }) => {
-        page.on('dialog', dialog => {
-            expect.soft(dialog.message()).toContain('User does not exist.')
-            dialog.accept();
-        });
-        const username = faker.internet.userName();
-        const password = faker.internet.password();
-        await page.goto('https://www.demoblaze.com/index.html');
-        await expect.soft(page).toHaveURL('https://www.demoblaze.com/index.html');
-        await page.getByRole('link', { name: 'Log in' }).click();
-        await page.locator('#loginusername').click();
-        await page.locator('#loginusername').fill(username);
-        await page.locator('#loginpassword').click();
-        await page.locator('#loginpassword').fill(password);
-        await page.getByRole('button', { name: 'Log in' }).click();
+        const loginNonExisting = new LoginLogoutPage(page);
+        await loginNonExisting.gotoLoginLogoutPage();
+        await loginNonExisting.logInMissingAccount();
     });
 
-    //login funkcija
     test('login with no credentials', async ({ page }) => {
-        page.on('dialog', dialog => {
-            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
-            dialog.accept();
-        });
-        await page.goto('https://www.demoblaze.com/index.html');
-        await expect.soft(page).toHaveURL('https://www.demoblaze.com/index.html');
-        await page.getByRole('link', { name: 'Log in' }).click();
-        await page.getByRole('button', { name: 'Log in' }).click();
+        const blankCredentials = new LoginLogoutPage(page);
+        await blankCredentials.gotoLoginLogoutPage();
+        await blankCredentials.logInNoCredentials();
     });
 
     test('login with blank username field', async ({ page }) => {
-        page.on('dialog', dialog => {
-            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
-            dialog.accept();
-        });
-        const password = faker.internet.password();
-        await page.goto('https://www.demoblaze.com/index.html');
-        await expect.soft(page).toHaveURL('https://www.demoblaze.com/index.html');
-        await page.getByRole('link', { name: 'Log in' }).click();
-        await page.locator('#loginpassword').click();
-        await page.locator('#loginpassword').fill(password);
-        await page.getByRole('button', { name: 'Log in' }).click();
+        const blankUsernameField = new LoginLogoutPage(page);
+        await blankUsernameField.gotoLoginLogoutPage();
+        await blankUsernameField.blankUsername();
     });
 
     test('login with blank password field', async ({ page }) => {
-        page.on('dialog', dialog => {
-            expect.soft(dialog.message()).toContain('Please fill out Username and Password.')
-            dialog.accept();
-        });
-        const username = faker.internet.userName();
-        await page.goto('https://www.demoblaze.com/index.html');
-        await expect.soft(page).toHaveURL('https://www.demoblaze.com/index.html');
-        await page.getByRole('link', { name: 'Log in' }).click();
-        await page.locator('#loginusername').click();
-        await page.locator('#loginusername').fill(username);
-        await page.getByRole('button', { name: 'Log in' }).click();
-
+        const blankPasswordField = new LoginLogoutPage(page);
+        await blankPasswordField.gotoLoginLogoutPage();
+        await blankPasswordField.blankPassword();
     });
 
     test('login css checks', async ({ page }) => {
-        const username = faker.internet.userName();
-        await page.goto('https://www.demoblaze.com/index.html');
-        await expect.soft(page).toHaveURL('https://www.demoblaze.com/index.html');
-        await page.getByRole('link', { name: 'Log in' }).click();
-        await expect(page.locator('#loginusername.form-control')).toHaveCSS('color', 'rgb(70, 74, 76)');
-        await expect(page.locator('#loginpassword.form-control')).toHaveCSS('color', 'rgb(70, 74, 76)');
-        await expect(page.getByRole('button', { name: 'Log in' })).toHaveCSS('background-color', 'rgb(2, 117, 216)');
+        const loginCSStest = new LoginLogoutPage(page);
+        await loginCSStest.gotoLoginLogoutPage();
+        await loginCSStest.loginCSSCheck();
     });
+
 });
